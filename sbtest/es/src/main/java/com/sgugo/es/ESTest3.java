@@ -36,30 +36,32 @@ public class ESTest3 {
         );
         RestHighLevelClient esClient = new RestHighLevelClient(builder);
 
-        //查询所有文档
-        //创建请求对象：SearchRequest
-        SearchRequest request = new SearchRequest();
+        //批量新增文档
+        //创建请求对象：BulkRequest()
+        BulkRequest request = new BulkRequest();
 
-        //关联要查看的索引
-        request.indices("user");
+        //添加文档数据：需要使用IndexRequest请求对象
+        //为了简化操作，这里直接手写JSON字符串，而不是先创建数据对象再转为JSON
+        IndexRequest user1 = new IndexRequest().index("user").id("1002")
+                .source(XContentType.JSON, "name", "V", "age", 20, "gender", "male");
+        IndexRequest user2 = new IndexRequest().index("user").id("1003")
+                .source(XContentType.JSON, "name", "J", "age", 21, "gender", "male");
+        IndexRequest user3 = new IndexRequest().index("user").id("1004")
+                .source(XContentType.JSON, "name", "T", "age", 22, "gender", "male");
 
-        // 构建查询的请求体
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        request.add(user1).add(user2).add(user3);
 
-        //查询所有数据
-        sourceBuilder.query(QueryBuilders.matchAllQuery());
-        request.source(sourceBuilder);
+        //发送请求，获取响应
+        BulkResponse response = esClient.bulk(request, RequestOptions.DEFAULT);
 
-        //发送请求
-        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
-
-        //查看查询的结果
-        SearchHits hits = response.getHits();
-        for (SearchHit hit : hits) {
-            System.out.println(hit.getSourceAsString());
-        }
+        //查看操作结果
+        System.out.println("耗时："+response.getTook());
+        System.out.println("成员："+ Arrays.toString(response.getItems()));
 
         //关闭 ES 客户端
         esClient.close();
     }
 }
+
+
+
