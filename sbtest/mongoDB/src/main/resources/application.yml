@@ -1,4 +1,13 @@
+#spring:
+#  data:
+#    mongodb:
+#      uri: mongodb://myroot:2ck23-5@159.75.225.162:27017/article
+
 spring:
   data:
     mongodb:
-      uri: mongodb://root:23cx%40fdw@159.75.225.162:27017,159.75.225.162:27018,159.75.225.162:27019/article
+      database: article
+#      username: blog
+#      password: 1234
+      host: 159.75.225.162
+      port: 27017
