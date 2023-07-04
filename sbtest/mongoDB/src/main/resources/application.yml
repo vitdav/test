@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://root:23cx%40fdw@159.75.225.162:27017,159.75.225.162:27018,159.75.225.162:27019/article
