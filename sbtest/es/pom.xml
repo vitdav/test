@@ -37,13 +37,6 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.2</version>
         </dependency>
-
-        <!-- 覆盖springboot维护的7.x版本 -->
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-client</artifactId>
-            <version>8.7.0</version>
-        </dependency>
     </dependencies>
 
 </project>

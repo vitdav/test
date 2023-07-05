@@ -32,23 +32,19 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 
-/**
- * es8的Java客户端配置
- * author：Geng
- */
 @Configuration
 @Slf4j
 public class ElasticSearchConfig {
 
-    @Value("${spring.elasticsearch.rest.host}")
+    @Value("${spring.elasticsearch.host}")
     private String host;
-    @Value("${spring.elasticsearch.rest.port}")
+    @Value("${spring.elasticsearch.port}")
     private int port;
-    @Value("${spring.elasticsearch.rest.username}")
+    @Value("${spring.elasticsearch.username}")
     private String userName;
-    @Value("${spring.elasticsearch.rest.password}")
+    @Value("${spring.elasticsearch.password}")
     private String passWord;
-    @Value("${spring.elasticsearch.rest.crtName}")
+    @Value("${spring.elasticsearch.crtName}")
     private String tempCrtName;
 
     private static String crtName;
