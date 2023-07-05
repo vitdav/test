@@ -1,0 +1,12 @@
+spring:
+  elasticsearch:
+    rest:
+      # 是否启用es
+      enable: true
+      uris: 159.75.225.162:9200 #es
+      host: 159.75.225.162
+      port: 9200
+      username: elastic
+      password: xNit99mzkgKjstx_UhsH
+      index: indexName
+      crtName: http_ca.crt

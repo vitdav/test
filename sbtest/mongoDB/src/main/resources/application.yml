@@ -1,13 +1,6 @@
-#spring:
-#  data:
-#    mongodb:
-#      uri: mongodb://myroot:2ck23-5@159.75.225.162:27017/article
-
 spring:
   data:
     mongodb:
-      database: article
-#      username: blog
-#      password: 1234
-      host: 159.75.225.162
-      port: 27017
+      uri: mongodb://myroot:2ck23-5@159.75.225.162:27017/article?authSource=admin&authMechanism=SCRAM-SHA-1
+
+
