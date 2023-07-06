@@ -6,6 +6,7 @@
     <modules>
         <module>es</module>
         <module>mongoDB</module>
+        <module>cache</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
