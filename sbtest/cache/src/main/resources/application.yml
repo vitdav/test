@@ -1,5 +1,6 @@
-spring:
-  cache:
-    type: ehcache # 指定缓存方式，默认是Simple
-    ehcache: # 可以对ehcache进一步配置，指定ehcache的配置文件
-      config: ehcache.xml # 默认配置文件就是resource下的ehcache.xml，可以不配置
+#spring:
+#  cache:
+#    type: ehcache # 指定缓存方式，默认是Simple
+#    ehcache: # 可以对ehcache进一步配置，指定ehcache的配置文件
+#      config: ehcache.xml # 默认配置文件就是resource下的ehcache.xml，可以不配置
+
