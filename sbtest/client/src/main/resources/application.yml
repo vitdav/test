@@ -1,0 +1,13 @@
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8000
+management:
+  endpoint:
+    health:
+      show-details: always # 默认是never，什么都不显示
+  endpoints:
+    web:
+      exposure:
+        include: "*" # 配置显示什么种类的信息，默认值是health

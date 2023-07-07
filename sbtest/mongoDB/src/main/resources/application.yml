@@ -2,5 +2,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://myroot:2ck23-5@159.75.225.162:27017/article?authSource=admin&authMechanism=SCRAM-SHA-1
-
+server:
+  port: 8001
 

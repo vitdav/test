@@ -7,6 +7,8 @@
         <module>es</module>
         <module>mongoDB</module>
         <module>cache</module>
+        <module>monitor</module>
+        <module>client</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -4,3 +4,39 @@
 #    ehcache: # 可以对ehcache进一步配置，指定ehcache的配置文件
 #      config: ehcache.xml # 默认配置文件就是resource下的ehcache.xml，可以不配置
 
+spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:8000
+  application:
+    name: 监控测试
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://159.75.225.162:3306/aiface?serverTimezone=UTC
+      username: admin
+      password: aiface2023
+  data:
+    mongodb:
+      uri: mongodb://myroot:2ck23-5@159.75.225.162:27017/article?authSource=admin&authMechanism=SCRAM-SHA-1
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+    enabled-by-default: true
+  info:
+    env:
+      enabled: true
+
+
+info:
+  appName: 监控测试
+  author: @project.artifactId@
+  version: @project.version@
+
