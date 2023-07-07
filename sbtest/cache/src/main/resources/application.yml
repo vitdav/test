@@ -10,7 +10,7 @@ spring:
       client:
         url: http://localhost:8000
   application:
-    name: 监控测试
+    name: @project.artifactId@
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -36,7 +36,7 @@ management:
 
 
 info:
-  appName: 监控测试
-  author: @project.artifactId@
+  appName: @project.artifactId@
+  author: Aaron
   version: @project.version@
 
