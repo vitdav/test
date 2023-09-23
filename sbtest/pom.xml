@@ -9,7 +9,11 @@
         <module>cache</module>
         <module>monitor</module>
         <module>client</module>
+<<<<<<< HEAD
         <module>general</module>
+=======
+        <module>t</module>
+>>>>>>> eca563f6b71de529f2dac4b982feed0ef7f12d12
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
