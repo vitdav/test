@@ -5,7 +5,14 @@ spring:
       url: jdbc:mysql://159.75.225.162:3306/test?serverTimezone=UTC
       username: admin
       password: sgugo2020!
-
+  security:
+    user:
+      name: a
+      password: 123456
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
 mybatis:
   # mapper映射文件所在的目录
   mapper-locations: classpath:mapper/*.xml
@@ -21,3 +28,4 @@ mybatis:
     lazy-loading-enabled: true
     # 开启二级缓存
     cache-enabled: true
+
