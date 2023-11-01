@@ -1,9 +1,16 @@
 package com.sbtest.security.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -12,7 +19,9 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 @Configuration
 //添加security过滤器，此处一定要加入此注解，否则下面的httpSecurity无法装配
 @EnableWebSecurity
-public class SecurityConfigure{
+public class SecurityConfigure {
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
@@ -43,6 +52,25 @@ public class SecurityConfigure{
                 .and().csrf().disable()
                 .build();
     }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception{
+        return authenticationConfiguration.getAuthenticationManager();
+
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(){
+        InMemoryUserDetailsManager userDetailsService = new InMemoryUserDetailsManager();
+        userDetailsService.createUser(
+                User.withUsername("master")
+                        .password("{noop}123456")//noop表示明文
+                        .roles("admin")
+                        .build());
+        return userDetailsService;
+    }
+
 }
 
 
