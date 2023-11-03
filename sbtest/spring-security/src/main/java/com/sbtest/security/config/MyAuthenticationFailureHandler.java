@@ -1,6 +1,7 @@
 package com.sbtest.security.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 
 public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
 
@@ -22,8 +24,9 @@ public class MyAuthenticationFailureHandler implements AuthenticationFailureHand
         Map<String, Object> result = new HashMap<String, Object>();
 
         result.put("msg", "登录失败：" + exception.getMessage());
-        result.put("status", 500);
+        // result.put("status", 500);
         response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         String s = new ObjectMapper().writeValueAsString(result);
         response.getWriter().println(s);
     }

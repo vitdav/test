@@ -12,9 +12,4 @@ public class BaseTest {
     @Autowired
     private UserMapper userMapper;
 
-    @Test
-    public void test1(){
-        User user = userMapper.getByUserName("Victor");
-        System.out.println(user);
-    }
 }
