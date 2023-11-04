@@ -29,5 +29,7 @@ public class MyLogoutSuccessHandler implements LogoutSuccessHandler {
         String s = new ObjectMapper().writeValueAsString(result);//json格式转字符串
         response.getWriter().println(s);//打印json格式数据
 
+
+
     }
 }

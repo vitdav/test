@@ -29,7 +29,7 @@ public class MyUserDetailsService implements UserDetailsService {
         //1.查询用户
         User user = userMapper.loadUserByUsername(username);
         if (ObjectUtils.isEmpty(user))
-            throw new RuntimeException("用户不存在");
+            throw new UsernameNotFoundException("用户不存在");
         //2.查询权限信息
         List<Role> roles = userMapper.getRolesByUid(user.getId());
         user.setRoles(roles);

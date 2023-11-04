@@ -3,7 +3,7 @@ package com.sbtest.security.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,22 +12,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class MyAuthenticationFailureHandler implements AuthenticationFailureHandler {
+public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void onAuthenticationFailure(
-         HttpServletRequest request,
-         HttpServletResponse response,
-         AuthenticationException exception
+    public void commence(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException authException
     ) throws IOException, ServletException {
+        //自定义返回的信息
         Map<String, Object> result = new HashMap<String, Object>();
-
-        result.put("msg", "登录失败：" + exception.getMessage());
-        result.put("status", 500);
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        result.put("code",401);
+        result.put("msg", "请先登录");
+        //json格式转字符串
         String s = new ObjectMapper().writeValueAsString(result);
+
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().println(s);
     }
 }

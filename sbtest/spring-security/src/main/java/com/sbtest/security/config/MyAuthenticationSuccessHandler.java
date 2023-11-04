@@ -18,12 +18,11 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         //自定义认证成功的信息，然后通过 response传递给前端
         HashMap<String, Object> result = new HashMap<>();
-        // result.put("status",200); //缓存Spring内置的状态码枚举
+        result.put("status",200);
         result.put("msg","登录成功");
-        //获取用户信息，也一并返回
-        User userInfo = (User) authentication.getPrincipal();
+
         // result.put("authentication", authentication); //获取权限信息返回，可选
-        result.put("userInfo",userInfo);
+        result.put("userInfo",authentication.getPrincipal());
 
 
         response.setContentType("application/json;charset=UTF-8");

@@ -10,9 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class User implements UserDetails {
+    private static final long serialVersionUID = 4600135322363102061L;
     private Integer id;
     private String username;
     private String password;
@@ -33,24 +32,26 @@ public class User implements UserDetails {
         return authorities;
     }
 
+
+
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return enabled;
     }
 }
 
