@@ -1,5 +1,6 @@
 package com.sbtest.security.config;
 
+import com.sbtest.security.filter.LoginFilter;
 import com.sbtest.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -7,19 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.OrRequestMatcher;
+
 
 
 @Configuration
 public class SecurityConfigure extends WebSecurityConfigurerAdapter {
-    //1. 注入自定义的 DetailsService
+    //1. 注入自定义的数据源 DetailsService
     private final MyUserDetailsService myUserDetailsService;
 
     @Autowired
@@ -45,9 +44,10 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     public LoginFilter loginFilter() throws Exception {
         LoginFilter loginFilter = new LoginFilter();
 
-        //1. 这里可以选择手动指定用户名和密码的参数名，让前端传参更灵活
+        //1. 这里可以选择手动指定用户名、密码和验证码的参数名，让前端传参更灵活
         loginFilter.setUsernameParameter("uname"); //指定接收json用户名的key
         loginFilter.setPasswordParameter("pwd");//指定接收json密码的key
+        loginFilter.setKaptchaKey("kaptcha");
 
         //2. 注入自定义的AuthenticationManager
             //调用暴漏自定义AuthenticationManager的方法，进行获取
@@ -66,10 +66,17 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
         return loginFilter;
     }
 
+    //创建一个自定义的密码加密器
+    @Bean
+    public PasswordEncoder BcryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
+                .mvcMatchers("/vc").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
                 .and()

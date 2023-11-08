@@ -10,8 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User implements UserDetails {
-    private static final long serialVersionUID = 4600135322363102061L;
     private Integer id;
     private String username;
     private String password;
