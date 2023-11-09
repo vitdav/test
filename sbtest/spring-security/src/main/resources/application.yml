@@ -29,4 +29,7 @@ mybatis:
     lazy-loading-enabled: true
     # 开启二级缓存
     cache-enabled: true
-
+server:
+  reactive:
+    session:
+      timeout: 1

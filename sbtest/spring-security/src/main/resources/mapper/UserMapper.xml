@@ -20,4 +20,10 @@
         from role r, user_role ur
         where r.id = ur.rid and ur.uid = #{uid}
     </select>
+
+    <!--Integer updatePassword-->
+    <update id="updatePassword">
+        update `user` set password=#{password}
+        where username=#{username}
+    </update>
 </mapper>

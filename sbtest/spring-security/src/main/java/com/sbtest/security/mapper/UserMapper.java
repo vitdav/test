@@ -3,6 +3,7 @@ package com.sbtest.security.mapper;
 import com.sbtest.security.entity.Role;
 import com.sbtest.security.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -23,4 +24,11 @@ public interface UserMapper {
      */
     List<Role> getRolesByUid(Integer uid);
 
+    /**
+     * 根据用户名更新密码
+     * @param username
+     * @param password
+     * @return
+     */
+    Integer updatePassword(@Param("username") String username,@Param("password") String password);
 }

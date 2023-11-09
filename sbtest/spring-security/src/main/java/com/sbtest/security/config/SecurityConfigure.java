@@ -67,10 +67,10 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
     //创建一个自定义的密码加密器
-    @Bean
-    public PasswordEncoder BcryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    // @Bean
+    // public PasswordEncoder BcryptPasswordEncoder() {
+    //     return new BCryptPasswordEncoder();
+    // }
 
 
     @Override
