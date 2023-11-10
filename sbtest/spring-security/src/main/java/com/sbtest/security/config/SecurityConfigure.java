@@ -1,6 +1,7 @@
 package com.sbtest.security.config;
 
 import com.sbtest.security.filter.LoginFilter;
+import com.sbtest.security.service.MyRememberMeServices;
 import com.sbtest.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -10,20 +11,27 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
+import javax.sql.DataSource;
+import java.util.UUID;
 
 
 @Configuration
 public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     //1. 注入自定义的数据源 DetailsService
     private final MyUserDetailsService myUserDetailsService;
+    private final DataSource dataSource;
+
 
     @Autowired
-    public SecurityConfigure(MyUserDetailsService myUserDetailsService) {
+    public SecurityConfigure(MyUserDetailsService myUserDetailsService, DataSource dataSource) {
         this.myUserDetailsService = myUserDetailsService;
+        this.dataSource = dataSource;
     }
 
     //2.自定义 AuthenticationManager，覆盖默认的
@@ -48,6 +56,8 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
         loginFilter.setUsernameParameter("uname"); //指定接收json用户名的key
         loginFilter.setPasswordParameter("pwd");//指定接收json密码的key
         loginFilter.setKaptchaKey("kaptcha");
+        //设置认证成功时使用的自定义rememberMeService
+        loginFilter.setRememberMeServices(rememberMeServices());
 
         //2. 注入自定义的AuthenticationManager
             //调用暴漏自定义AuthenticationManager的方法，进行获取
@@ -63,14 +73,33 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
         //4. 指定认证的URL
         loginFilter.setFilterProcessesUrl("/doLogin");
 
+
         return loginFilter;
     }
 
-    //创建一个自定义的密码加密器
-    // @Bean
-    // public PasswordEncoder BcryptPasswordEncoder() {
-    //     return new BCryptPasswordEncoder();
-    // }
+    //2.指定数据库持久化
+    @Bean
+    public PersistentTokenRepository jdbcToken(){
+        //基于数据库实现，使用JdbcTokenRepository替代默认的内存实现
+        JdbcTokenRepositoryImpl jdbcToken = new JdbcTokenRepositoryImpl();
+        //指定数据源
+        jdbcToken.setDataSource(dataSource);
+        //创建表结构，第一次新建表结构时设置为true，第二次后要手动改为false
+        jdbcToken.setCreateTableOnStartup(true);
+
+        return jdbcToken;
+    }
+
+
+    //5. 自定义RememberMeServices记住我实现
+    public RememberMeServices rememberMeServices(){
+        return new MyRememberMeServices(
+                UUID.randomUUID().toString(),
+                userDetailsService(),
+                jdbcToken()
+        );
+    }
+
 
 
     @Override
@@ -79,6 +108,12 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .mvcMatchers("/vc").permitAll()
                 .anyRequest().authenticated()
                 .and().formLogin()
+
+                .and().rememberMe()
+                // .tokenRepository(jdbcToken())
+                //设置自动登录使用哪个rememberMeServices
+                .rememberMeServices(rememberMeServices())
+
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new MyAuthenticationEntryPoint())
