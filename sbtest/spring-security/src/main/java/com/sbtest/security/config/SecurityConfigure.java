@@ -1,5 +1,6 @@
 package com.sbtest.security.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sbtest.security.filter.LoginFilter;
 import com.sbtest.security.service.MyRememberMeServices;
 import com.sbtest.security.service.MyUserDetailsService;
@@ -16,8 +17,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.session.SessionInformationExpiredEvent;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -85,7 +93,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
         //指定数据源
         jdbcToken.setDataSource(dataSource);
         //创建表结构，第一次新建表结构时设置为true，第二次后要手动改为false
-        jdbcToken.setCreateTableOnStartup(true);
+        jdbcToken.setCreateTableOnStartup(false);
 
         return jdbcToken;
     }
@@ -122,7 +130,24 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and().logout()// 手动开启注销
                 .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
                 .logoutSuccessHandler(new MyLogoutSuccessHandler())
-                .and().csrf().disable();
+                .and().csrf().disable()
+
+                .sessionManagement() //开启会话管理
+                .maximumSessions(1) //设置运行会话的最大并发数
+                // .expiredUrl("/login")
+                .expiredSessionStrategy(event -> {
+                            HttpServletResponse response = event.getResponse();
+                            // map转json进行输出
+                            Map<String, Object> result = new HashMap<>();
+                            result.put("status", 500);
+                            result.put("msg", "当前会话已经失效,请重新登录!");
+                            String s = new ObjectMapper().writeValueAsString(result);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().println(s);
+                            response.flushBuffer();
+                    }
+                );
+
 
         //扩展过滤器
         // 1.addFilterAtt：将一个Filter，替换过滤器链中的某个Filter
@@ -132,6 +157,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 
 
     }
+
 }
 
 
