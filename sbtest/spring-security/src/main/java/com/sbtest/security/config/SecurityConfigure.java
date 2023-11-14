@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
@@ -130,8 +131,10 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and().logout()// 手动开启注销
                 .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
                 .logoutSuccessHandler(new MyLogoutSuccessHandler())
-                .and().csrf().disable()
-
+                .and()
+                .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .sessionManagement() //开启会话管理
                 .maximumSessions(1) //设置运行会话的最大并发数
                 // .expiredUrl("/login")
