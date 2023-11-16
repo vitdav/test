@@ -20,11 +20,15 @@ import org.springframework.security.web.authentication.rememberme.PersistentToke
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.session.SessionInformationExpiredEvent;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -110,6 +114,22 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     }
 
 
+    //6. 配置CORS 跨域
+    CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        // 允许的请求头：* 表示所有
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
+        // 允许的请求方法：*表示所有
+        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+        // 允许的请求源：*表示任何源
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        // 设置响应时间
+        corsConfiguration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        //允许跨域访问的路径：*表示所有路径
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -126,7 +146,9 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(new MyAuthenticationEntryPoint())
-
+                .accessDeniedHandler()
+                .and().cors()
+                .configurationSource(corsConfigurationSource())
                 //注销还是在这里进行配置
                 .and().logout()// 手动开启注销
                 .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
@@ -150,6 +172,7 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
                             response.flushBuffer();
                     }
                 );
+
 
 
         //扩展过滤器
