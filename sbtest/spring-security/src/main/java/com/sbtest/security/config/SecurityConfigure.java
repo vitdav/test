@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
@@ -35,6 +36,11 @@ import java.util.UUID;
 
 
 @Configuration
+@EnableGlobalMethodSecurity(
+        prePostEnabled=true,
+        securedEnabled=true,
+        jsr250Enabled=true
+)
 public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     //1. 注入自定义的数据源 DetailsService
     private final MyUserDetailsService myUserDetailsService;
@@ -134,53 +140,60 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .mvcMatchers("/vc").permitAll()
+                .mvcMatchers("/admin").hasRole("ADMIN")
+                .mvcMatchers("user").hasRole("USER")
+                .mvcMatchers("/getInfo","/hello").hasAuthority("READ_INFO")
                 .anyRequest().authenticated()
                 .and().formLogin()
+                .and().csrf().disable();
 
-                .and().rememberMe()
-                // .tokenRepository(jdbcToken())
-                //设置自动登录使用哪个rememberMeServices
-                .rememberMeServices(rememberMeServices())
 
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new MyAuthenticationEntryPoint())
-                .accessDeniedHandler()
-                .and().cors()
-                .configurationSource(corsConfigurationSource())
-                //注销还是在这里进行配置
-                .and().logout()// 手动开启注销
-                .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
-                .logoutSuccessHandler(new MyLogoutSuccessHandler())
-                .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
-                .sessionManagement() //开启会话管理
-                .maximumSessions(1) //设置运行会话的最大并发数
+
+
+        // http.authorizeHttpRequests()
+        //         .mvcMatchers("/vc").permitAll()
+        //         .anyRequest().authenticated()
+        //         .and().formLogin()
+        //
+        //         .and().rememberMe()
+        //         // .tokenRepository(jdbcToken())
+        //         //设置自动登录使用哪个rememberMeServices
+        //         .rememberMeServices(rememberMeServices())
+        //
+        //         .and()
+        //         .exceptionHandling()
+        //         .authenticationEntryPoint(new MyAuthenticationEntryPoint())
+        //         .accessDeniedHandler(new MyAccessDeniedHandler())
+        //         .and().cors()
+        //         .configurationSource(corsConfigurationSource())
+        //         //注销还是在这里进行配置
+        //         .and().logout()// 手动开启注销
+        //         .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
+        //         .logoutSuccessHandler(new MyLogoutSuccessHandler())
+        //         .and()
+        //         .csrf()
+                // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                // .and()
+                // .sessionManagement() //开启会话管理
+                // .maximumSessions(1) //设置运行会话的最大并发数
                 // .expiredUrl("/login")
-                .expiredSessionStrategy(event -> {
-                            HttpServletResponse response = event.getResponse();
-                            // map转json进行输出
-                            Map<String, Object> result = new HashMap<>();
-                            result.put("status", 500);
-                            result.put("msg", "当前会话已经失效,请重新登录!");
-                            String s = new ObjectMapper().writeValueAsString(result);
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.getWriter().println(s);
-                            response.flushBuffer();
-                    }
-                );
+                // .expiredSessionStrategy(event -> {
+                //             HttpServletResponse response = event.getResponse();
+                //             // map转json进行输出
+                //             Map<String, Object> result = new HashMap<>();
+                //             result.put("status", 500);
+                //             result.put("msg", "当前会话已经失效,请重新登录!");
+                //             String s = new ObjectMapper().writeValueAsString(result);
+                //             response.setContentType("application/json;charset=UTF-8");
+                //             response.getWriter().println(s);
+                //             response.flushBuffer();
+                //     }
+                // );
 
 
 
         //扩展过滤器
-        // 1.addFilterAtt：将一个Filter，替换过滤器链中的某个Filter
-        // 2.before：将一个Filter，放在过滤器链中某个Filter之前
-        // 2.after：将一个Filter，放在过滤器链中某个Filter之后
-        http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
-
+        // http.addFilterAt(loginFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
