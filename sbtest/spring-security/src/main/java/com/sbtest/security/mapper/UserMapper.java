@@ -25,6 +25,14 @@ public interface UserMapper {
     List<Role> getRolesByUid(Integer uid);
 
     /**
+     * 根据用户id获取角色信息
+     * @param uid
+     * @return
+     */
+    List<Role> getUserRoleByUid(Integer uid);
+
+
+    /**
      * 根据用户名更新密码
      * @param username
      * @param password

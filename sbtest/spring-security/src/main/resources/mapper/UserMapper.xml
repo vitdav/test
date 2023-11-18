@@ -6,9 +6,7 @@
 <mapper namespace="com.sbtest.security.mapper.UserMapper">
     <!--loadUserByUsername-->
     <select id="loadUserByUsername" resultType="User">
-        select id, username, password, enabled, accountNonExpired,
-        accountNonLocked, credentialsNonExpired
-        from user
+        select * from user
         where username = #{username}
     </select>
     <!--getRolesByUid
@@ -19,6 +17,10 @@
         select r.id, r.name, r.name_zh nameZh
         from role r, user_role ur
         where r.id = ur.rid and ur.uid = #{uid}
+    </select>
+    <select id="getUserRoleByUid" resultType="com.sbtest.security.entity.Role">
+        select r.* from role r,user_role ur
+        where ur.uid = #{uid} and ur.rid = r.id
     </select>
 
     <!--Integer updatePassword-->

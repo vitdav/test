@@ -17,9 +17,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private Boolean enabled;
-    private Boolean accountNonExpired;
-    private Boolean accountNonLocked;
-    private Boolean credentialsNonExpired;
+    private Boolean locked;
     private List<Role> roles = new ArrayList<>();//关系属性，用来存储当前用户所有角色信息
 
     //返回权限信息
@@ -33,21 +31,19 @@ public class User implements UserDetails {
         return authorities;
     }
 
-
-
     @Override
     public boolean isAccountNonExpired() {
-        return accountNonLocked;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return accountNonLocked;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
+        return true;
     }
 
     @Override
