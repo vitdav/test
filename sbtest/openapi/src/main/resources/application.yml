@@ -1,0 +1,16 @@
+springfox:
+  documentation:
+    swagger:
+      v2:
+        path: /api-docs # 指定url
+        use-model-v3: true
+
+knife4j:
+  # 开启增强
+  enable: true
+  # 开启登录认证
+  basic:
+    enable: true
+    username: admin
+    password: 123456
+
