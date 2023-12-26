@@ -33,6 +33,7 @@ public class Knife4jConfig {
                //  .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 // 方式二: 只有当方法上有  @ApiOperation 注解时才能生成对应的接口文档
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
+                // .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build();
     }

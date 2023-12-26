@@ -2,9 +2,8 @@ springfox:
   documentation:
     swagger:
       v2:
-        path: /api-docs # 指定url
         use-model-v3: true
-
+    # 默认为false，改为true，相当于为每个请求参数添加了@ParameterObject
 knife4j:
   # 开启增强
   enable: true
@@ -13,4 +12,5 @@ knife4j:
     enable: true
     username: admin
     password: 123456
+
 
