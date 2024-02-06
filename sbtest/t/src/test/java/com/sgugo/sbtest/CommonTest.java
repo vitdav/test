@@ -4,6 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.File;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * @Author: Aaron Jinno
@@ -17,10 +21,8 @@ public class CommonTest {
 
     @Test
     public void test1(){
-        System.out.println("hello-test1");
-        File dir = new File("C:\\Users\\A\\Desktop\\INT");
+        List<String> list = Arrays.asList("aa", "bb");
 
-        File[] files = dir.listFiles();
 
 
     }

@@ -7,6 +7,7 @@ import com.sbtest.security.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -134,44 +135,46 @@ public class SecurityConfigure extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-            .mvcMatchers("/vc").permitAll()
-            .anyRequest().authenticated()
+        http.
+            //1. 开启请求的权限认证
+            authorizeHttpRequests()
+                //1.1 放行 验证码和Login
+                .mvcMatchers("/vc","login").permitAll()
+                //1.2 放行静态资源
+                .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
+                //1.3 放行API文档
+                .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
+                //1.4 拦截其他所有请求
+                .anyRequest().authenticated()
+
+            //2. 开启FormLogin登录
             .and().formLogin()
-            .and().rememberMe()
-                .tokenRepository(jdbcToken())
-        //         //设置自动登录使用哪个rememberMeServices
-                 .rememberMeServices(rememberMeServices())
-        //
-                 .and()
-                 .exceptionHandling()
-                 .authenticationEntryPoint(new MyAuthenticationEntryPoint())
-                 .accessDeniedHandler(new MyAccessDeniedHandler())
-                 .and().cors()
-                 .configurationSource(corsConfigurationSource())
-        //         //注销还是在这里进行配置
-                 .and().logout()// 手动开启注销
-                 .logoutUrl("/logout") // 手动指定注销的url，默认是 `logout`,且为get请求
-                 .logoutSuccessHandler(new MyLogoutSuccessHandler())
-                 .and()
-                 .csrf()
-                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                 .and()
-                 .sessionManagement() //开启会话管理
-                 .maximumSessions(1) //设置运行会话的最大并发数
-                 .expiredUrl("/login")
-                 .expiredSessionStrategy(event -> {
-                         HttpServletResponse response = event.getResponse();
-                             // map转json进行输出
-                        Map<String, Object> result = new HashMap<>();
-                        result.put("status", 500);
-                        result.put("msg", "当前会话已经失效,请重新登录!");
-                        String s = new ObjectMapper().writeValueAsString(result);
-                        response.setContentType("application/json;charset=UTF-8");
-                        response.getWriter().println(s);
-                        response.flushBuffer();
-                    }
-                );
+
+            //3. 配置注销
+            .and().logout()// 手动开启注销
+                //3.1 手动指定注销的url，默认是 `logout`,且为get请求
+                .logoutUrl("/logout")
+                //3.2 注销后的处理
+                .logoutSuccessHandler(new MyLogoutSuccessHandler())
+
+
+            //4. 开启Oauth2 认证
+            .and().oauth2Login()
+
+            //6. 开启自定义异常处理
+            .and().exceptionHandling()
+                //6.1 处理认证异常
+                .authenticationEntryPoint(new MyAuthenticationEntryPoint())
+                //6.2 处理授权异常
+                .accessDeniedHandler(new MyAccessDeniedHandler())
+            //7. 跨域处理
+            .and().cors()
+                //7.1 添加跨域配置
+                .configurationSource(corsConfigurationSource())
+            //8. CSRF 攻击防御
+            .and().csrf()
+                //8.1 开启双Token验证
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
 
 
