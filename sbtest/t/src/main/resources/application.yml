@@ -1,0 +1,12 @@
+server:
+  port: 6789
+spring:
+  application:
+    name: t
+t:
+  alioss:
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    access-key: LTAI5tLVe68F9MK3Mt4RybCF
+    access-secret: epwosuY69kiCrrVtE4TvFtbEbaKfU5
+    # 还可以直接在这里配置 bucket，直接访问Bucket
+    bucket: dav-a
