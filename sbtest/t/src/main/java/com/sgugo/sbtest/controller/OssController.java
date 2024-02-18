@@ -1,14 +1,10 @@
 package com.sgugo.sbtest.controller;
 
-import com.aliyun.oss.ClientBuilderConfiguration;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.auth.CredentialsProviderFactory;
 import com.aliyun.oss.common.auth.DefaultCredentialProvider;
-import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.OSSObjectSummary;
-import com.aliyun.oss.model.ObjectListing;
-import com.aliyun.oss.model.PutObjectResult;
+import com.aliyun.oss.model.*;
 import com.sgugo.sbtest.properties.AliOssProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -80,8 +76,10 @@ public class OssController {
         String bucketName = aliOssProperties.getBucket();
         String objectName = "f1.jpg";
 
+
         //3. 进行上传
         PutObjectResult result = ossClient.putObject(bucketName, objectName, new File("001.jpg"));
+
 
         ossClient.shutdown();
     }
@@ -130,6 +128,36 @@ public class OssController {
                 e.printStackTrace();
             }
         }
+    }
+
+    @GetMapping("/download_file")
+    public void downloadFile(){
+        //1. 创建OSSClient
+        OSS ossClient = OSSInit();
+
+        //2. 指明访问的 bucketName，和 文件名
+        String bucketName = aliOssProperties.getBucket();
+        String objectName = "f1.jpg";
+        File f1 = new File("out.jpg"); //要下载的路径
+
+        //3. 调用getObject方法下载文件
+        ossClient.getObject(new GetObjectRequest(bucketName,objectName),f1);
+
+        ossClient.shutdown();
+    }
+
+    @GetMapping("/is_have")
+    public void isHave(){
+        // 1. 创建OSSClient
+        OSS ossClient = OSSInit();
+
+        //2. 指明访问的 bucketName，和 文件名
+        String bucketName = aliOssProperties.getBucket();
+        String objectName = "f2.jpg";
+
+        //3. 调用方法判断文件是否存在：true为存在，false为不存在
+        boolean res = ossClient.doesObjectExist(bucketName, objectName);
+        System.out.println(res);
     }
 
 
