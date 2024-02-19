@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController()
@@ -144,6 +145,66 @@ public class OssController {
         ossClient.getObject(new GetObjectRequest(bucketName,objectName),f1);
 
         ossClient.shutdown();
+    }
+
+    @GetMapping("/delete_multi")
+    public void deleteMulti(){
+        // 1. 创建OSSClient，指明访问的 bucketName
+        OSS ossClient = OSSInit();
+        String bucketName = aliOssProperties.getBucket();
+
+        // 2. 指明要三次的文件名集合（List）
+        ArrayList<String> keys = new ArrayList<>();
+        keys.add("1.jpg");
+        keys.add("2.jpg");
+        keys.add("3.jpg");
+
+        // 3.进行删除
+        DeleteObjectsResult request = ossClient.deleteObjects(
+                new DeleteObjectsRequest(bucketName)
+                    .withKeys(keys) //指定要删除的文件名集合
+                    .withEncodingType("url") //指定文件名的编码
+        );
+        // 4. （可选）获取删除的结果：返回所有删除的文件列表
+        List<String> deletedObjects = request.getDeletedObjects();
+
+        ossClient.shutdown();
+    }
+
+    @GetMapping("/delete_dir")
+    public void deleteDir(){
+        // 1. 创建OSSClient，指明访问的 bucketName
+        OSS ossClient = OSSInit();
+        String bucketName = aliOssProperties.getBucket();
+
+        //2. 先列举所有包含指定前缀的文件
+        ListObjectsRequest request = new ListObjectsRequest(bucketName);
+        // withPrefix：指定前缀，如果是空或NULL，会删除整个Bucket
+        request.withPrefix("user/").withMarker(null);
+
+        ObjectListing objectListing = ossClient.listObjects(request);
+
+        // 3.将猎取出来的文件加入List集合
+        if(objectListing.getObjectSummaries().size()>0){
+            ArrayList<String> keys = new ArrayList<>();
+            for(OSSObjectSummary s: objectListing.getObjectSummaries()){
+                keys.add(s.getKey());
+            }
+
+            // 4. 批量删除List集合中的所有文件
+            DeleteObjectsResult deleteObjectsResult = ossClient.deleteObjects(
+                    new DeleteObjectsRequest(bucketName)
+                            .withKeys(keys) //指定要删除的文件名集合
+                            .withEncodingType("url") //指定文件名的编码
+            );
+
+            //5. （可选）获取删除的结果：返回所有删除的文件列表
+            List<String> deletedObjects = deleteObjectsResult.getDeletedObjects();
+
+            ossClient.shutdown();
+        }
+
+
     }
 
     @GetMapping("/is_have")
