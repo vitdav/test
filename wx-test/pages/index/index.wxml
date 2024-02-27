@@ -1,0 +1,12 @@
+<!--index.wxml-->
+<!-- 轮播图区域 -->
+<view class="swiper">1</view>
+
+<!-- 公司相关信息 -->
+<view class="info">2</view>
+
+<!-- 商品导航区域 -->
+<view class="goods-nav">3</view>
+
+<!-- 商品推荐区域 -->
+<view class="hot">4</view>
