@@ -1,10 +1,23 @@
 /**index.wxss**/
-page {
+page{
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  background-color: #efefef !important;
 }
-.scrollarea {
-  flex: 1;
-  overflow-y: hidden;
+swiper{
+  height:360rpx;
+  swiper-item{
+    image{
+      height:100%;
+      width:100%;
+    }
+    &:first-child{
+      background-color: skyblue;
+    }
+    &:nth-child(2){
+      background-color: lightcoral;
+    }
+    &:last-child{
+      background-color: lightseagreen;
+    }
+  }
 }
