@@ -5,7 +5,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class Client {
+public class Client3 {
     public static void main(String[] args) throws Exception {
         //1.创建Socket对象，创建的同时就会请求与服务端的连接
         Socket socket = new Socket("127.0.0.1", 2333);
@@ -41,3 +41,4 @@ public class Client {
         }
     }
 }
+

@@ -4,11 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>es</module>
-        <module>mongoDB</module>
         <module>cache</module>
         <module>monitor</module>
-        <module>client</module>
         <module>general</module>
         <module>t</module>
         <module>spring-security</module>
