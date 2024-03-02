@@ -6,10 +6,8 @@
     <modules>
         <module>cache</module>
         <module>monitor</module>
-        <module>general</module>
         <module>t</module>
         <module>spring-security</module>
-        <module>openapi</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
