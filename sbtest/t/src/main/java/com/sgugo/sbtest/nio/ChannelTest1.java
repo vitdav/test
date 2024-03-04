@@ -5,7 +5,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class FileChannel1 {
+public class ChannelTest1 {
     public static void main(String[] args) throws Exception {
         // 1. 通过文件创建FileChannel
         RandomAccessFile f1 = new RandomAccessFile("files/1.txt", "rw");
