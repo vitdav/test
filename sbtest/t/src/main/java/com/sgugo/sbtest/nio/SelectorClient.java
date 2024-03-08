@@ -10,7 +10,7 @@ public class SelectorClient {
         // 1. 创建Channel，连接服务器，并设置成非阻塞
         SocketChannel sc = SocketChannel.open();
         sc.configureBlocking(false);
-        sc.connect(new InetSocketAddress("127.0.0.1",1234));
+        sc.connect(new InetSocketAddress("127.0.0.1",4545));
 
         // 2. 对连接过程进行判断（网络连接是个过程，且可能失败）
         while(!sc.finishConnect()){
