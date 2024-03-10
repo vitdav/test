@@ -1,0 +1,89 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sky
+  main:
+    allow-circular-references: true
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://120.24.179.66:3306/sky_take_out?serverTimezone=UTC
+      username: admin
+      password: fuck2023!
+  redis:
+    host: 120.24.179.66
+    port: 6379
+    password: hello1234
+    database: 1 # 数据库编号（0~15）可选，默认是0
+
+springdoc:
+  group-configs: # 对文档进行分组：admin和user # 有bug,分组无效
+    - group: 'admin'
+      paths-to-match: '/**'
+      packages-to-scan: com.sgugo.sky.controller.admin
+    - group: 'user'
+      paths-to-match: '/**'
+      packages-to-scan: com.sgugo.sky.controller.user
+  default-flat-param-object: false
+knife4j:
+  enable: true
+  setting:
+    swagger-model-name: "POJO"
+    enable-dynamic-parameter: true
+    enable-group: true
+
+logging:
+  config: classpath:log4j2.xml
+
+
+sky:
+  jwt:
+    admin-secret: victor
+    admin-ttl: 12000
+    admin-token-name: token
+
+    user-secret: dav
+    user-ttl: 120000
+    user-token-name: authentication
+
+  #  阿里云OSS配置
+  alioss:
+    endpoint: oss-cn-shenzhen.aliyuncs.com
+    access-key-id: LTAI5tLVe68F9MK3Mt4RybCF
+    access-key-secret: epwosuY69kiCrrVtE4TvFtbEbaKfU5
+    # 还可以直接在这里配置 bucket，直接访问Bucket
+    bucket-name: dav-a
+
+
+mybatis:
+  # mapper映射文件所在的目录
+  mapper-locations: classpath:mapper/*.xml
+  # 返回值类型的别名：简化实体类的写法，不用写全类名了
+  type-aliases-package: com.sgugo.sky.entity
+  configuration:
+    # 是否开启驼峰映射
+    map-underscore-to-camel-case: true
+    # 控制台打印mapper执行的SQL语句，用于调试
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 延迟加载的全局开关，默认值false为不开启，实际开发中，大部分都是需要使用延迟加载的
+    lazy-loading-enabled: true
+    cache-enabled: true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
