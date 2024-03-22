@@ -8,6 +8,7 @@
         <module>monitor</module>
         <module>t</module>
         <module>spring-security</module>
+        <module>jvm</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
