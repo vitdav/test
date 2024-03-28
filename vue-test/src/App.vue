@@ -79,7 +79,7 @@ const list = ref([
 
 //2. 定义科目和成绩变量用于表单添加成绩
 const subject = ref('')
-const score = ref('')
+const score = ref(0)
 
 //3. 定义计算属性，用来计算总成绩和平均成绩
 const totalScore = computed(()=>{
@@ -89,7 +89,6 @@ const averageScore = computed(()=>{
 	if(list.value.length === 0){
 		return 0
 	}
-	console.log(list.value.length)
 	return (totalScore.value/list.value.length).toFixed(2)
 })
 
@@ -101,10 +100,11 @@ function del(id){
 //5. 方法：添加成绩
 function add(){
 	//进行格式的简单判断
-	if (!subject) {
+	if (!subject.value) {
 		alert('请输入科目')
 		return
 	}
+	
 	console.log(typeof score.value)
 	if (typeof score.value !== 'number') {
 		alert('请输入正确的成绩')
