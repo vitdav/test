@@ -1,55 +1,27 @@
 <template>
-	<view class="content">
-		<view>
-			<navigator url="/pages/list/list">新闻列表</navigator>
-		</view>
-		<image class="logo" src="/static/logo.png"></image>
-		<view class="text-area">
-			<text class="title">{{title}}</text>
-		</view>
+	<view>
+		<picker mode="date" start="1990-01-01" end="2024-04-18"
+			:value="current"  @change="changePicker"
+		>
+			<view>{{current}}</view>
+		</picker>
 	</view>
 </template>
 
-<script>
-	export default {
-		data() {
-			return {
-				title: 'Hello'
-			}
-		},
-		onLoad() {
-
-		},
-		methods: {
-
-		}
-	}
-</script>
-
-<style>
-	.content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.logo {
-		height: 200rpx;
-		width: 200rpx;
-		margin-top: 200rpx;
-		margin-left: auto;
-		margin-right: auto;
-		margin-bottom: 50rpx;
-	}
-
-	.text-area {
-		display: flex;
-		justify-content: center;
-	}
-
-	.title {
-		font-size: 36rpx;
-		color: #8f8f94;
-	}
+<style lang="scss">
+.nav-active{
+	color:blue;
+}
 </style>
+
+<script setup>
+import {ref} from 'vue'
+const current = ref("2024-04-18")
+
+function changePicker(e){
+	console.log(e)
+	//内容改变后的值，是一个数组，每一项对应每一列的值
+	console.log(e.detail.value)
+	current.value = e.detail.value
+}
+</script>
