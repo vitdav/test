@@ -1,16 +1,28 @@
 <template>
 	<view>
 		<h1>我的</h1>
-		<navigator url="/pages/login/login">点击登陆</navigator>
+		<!-- <button type="error" @click="goHome">回到初始页</button> -->
 	</view>
+	<!--  -->
 </template>
 
 <script setup>
-const obj = uni.getLaunchOptionsSync();
-console.log(obj)
+//获取页面栈数组
+const pages = getCurrentPages()
+console.log(pages)
 
-const obj2 = uni.getEnterOptionsSync();
-console.log(obj)
+const num = pages.length
+console.log("页面栈里页面的数量"+num)
+
+//获取页面栈数组中第一个页面对象（首页）
+const home = pages[0]
+console.log(home)
+
+const route = home.route 
+console.log(route) ///pages/index/index
+
+const vm = home.$vm
+console.log(vm)
 </script>
 
 <style>
