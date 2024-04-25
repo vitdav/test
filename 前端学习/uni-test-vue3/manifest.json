@@ -62,9 +62,9 @@
         },
 				"requiredPrivateInfos":[
 					"getLocation",
-					"chooseLocation"
-				],
-				"libVersion":"000"
+					"chooseLocation",
+					"chooseAddress"
+				]
     },
     "mp-alipay" : {
         "usingComponents" : true
