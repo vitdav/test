@@ -64,7 +64,8 @@
 					"getLocation",
 					"chooseLocation",
 					"chooseAddress"
-				]
+				],
+				"requiredBackgroundModes": ["audio"]
     },
     "mp-alipay" : {
         "usingComponents" : true
