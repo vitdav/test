@@ -1,34 +1,15 @@
 <template>
 <view>
-
+	<button @click="changeTarbar">修改首页的Tarbar</button>
 </view>
 </template>
 
 <script setup>
-import {onReady,onShow} from '@dcloudio/uni-app'
-
-onReady(()=>{
-	uni.setNavigationBarTitle({
-		title: '动态标题'
+function changeTarbar(){
+	uni.setTabBarItem({
+		index:0,
+		text:'Now',
+		selectedIconPath:'/static/logo.png'
 	})
-	
-	uni.setNavigationBarColor({
-		frontColor: '#ffffff',
-		backgroundColor:'#4cd964',
-		animation:{
-			duration:200,
-			timingFunc:'easeIn'
-		}
-	})
-	
-	uni.showNavigationBarLoading()
-	
-	setTimeout(()=>{
-		uni.hideNavigationBarLoading()
-	},1000)
-})
-
-onShow(()=>{
-	uni.hideHomeButton()
-})
+}
 </script>

@@ -65,6 +65,7 @@
 					"chooseLocation",
 					"chooseAddress"
 				],
+				"libVersion":"latest",
 				"requiredBackgroundModes": ["audio"]
     },
     "mp-alipay" : {
