@@ -50,16 +50,20 @@
 	    "list": [
 	      {
 	        "pagePath": "pages/index/index",
-	        // "iconPath": "",
-	        // "selectedIconPath": "",
+	        "iconPath": "/static/icon/home.png",
+	        "selectedIconPath": "/static/icon/home.png",
 	        "text": "首页"
 	      },
 	      {
 	        "pagePath": "pages/about/about",
+					"iconPath": "/static/icon/mine.png",
+					"selectedIconPath":"/static/icon/mine.png",
 	        "text": "关于"
 	      },
 				{
 				  "pagePath": "pages/list/list",
+					"iconPath": "/static/icon/list.png",
+					"selectedIconPath": "/static/icon/list.png",
 				  "text": "列表"
 				}
 	    ]

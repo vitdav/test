@@ -1,15 +1,13 @@
 <template>
 <view>
-	<button @click="changeTarbar">修改首页的Tarbar</button>
+	<button @click="changeBg">设置背景色</button>
+
 </view>
 </template>
 
 <script setup>
-function changeTarbar(){
-	uni.setTabBarItem({
-		index:0,
-		text:'Now',
-		selectedIconPath:'/static/logo.png'
+
+	uni.setBackgroundTextStyle({
+	  textStyle: 'dark' // 下拉背景字体、loading 图的样式为dark
 	})
-}
 </script>
