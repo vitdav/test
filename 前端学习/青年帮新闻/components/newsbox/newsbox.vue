@@ -10,8 +10,9 @@ const props = defineProps({
 				author:"张三",
 				hits:668,
 				picurl:"../../static/icon/nopic.jpg",
-				//浏览时间，PS：该时间是给个人中心的浏览记录使用的
-				looktime: "2022-2-2　22:22:22"
+				//浏览时间，该时间是给个人中心的浏览记录使用的
+				//默认不显示浏览时间，而是显示作者信息，当页面向组件传递了改参数，就显示时间。
+				// looktime: "2022-2-2　22:22:22"
 			}
 		}
 	}
@@ -31,9 +32,12 @@ const props = defineProps({
 			<!-- 右上的标题 -->
 			<view class="title">{{item.title}}</view>
 			<!-- 右下的作者信息和浏览量 -->
-			<view class="info">
+			<view class="info" v-if="!item.looktime">
 				<text>{{item.author}}</text>
-				<text>{{item.hits}}</text>
+				<text>{{item.hits}}浏览</text>
+			</view>
+			<view class="info" v-else>
+				<text>上次浏览:{{item.looktime}}</text>
 			</view>
 		</view>
 	</view>
