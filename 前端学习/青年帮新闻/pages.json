@@ -12,6 +12,13 @@
 			{
 				"navigationBarTitleText" : "我的"
 			}
+		},
+		{
+			"path" : "pages/detail/detail",
+			"style" : 
+			{
+				"navigationBarTitleText" : "新闻详情"
+			}
 		}
 	],
 	"globalStyle": {
