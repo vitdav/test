@@ -7,15 +7,18 @@ const navIndex = ref(0)
 //点击时设置该选项高亮显示，并切换新闻列表的分类
 function clickNav(index, id){
 	navIndex.value = index;
-	//切换分类时，需要先将页码和新闻列表数据进行初始化
+	//切换分类时，需要先将页码和新闻列表等数据进行初始化
 	currentPage.value = 1;
 	newsArr.value = [];
+	loading.value = 0;
 	getNewsData(id);
 }
 
-function goDetail(){
+//跳转到详情页
+function goDetail(item){
+	console.log(item)
 	uni.navigateTo({
-		url:"/pages/detail/detail"
+		url:`/pages/detail/detail?cid=${item.classid}&id=${item.id}`
 	})
 }
 
@@ -53,6 +56,11 @@ function getNewsData(id=50){
 		success(res){
 			console.log(res)
 			// newsArr.value = res.data
+			//判断是否还有数据，如果没有数据，就在底部显示：没有更多了
+			if(res.data.length==0){
+				loading.value = 2
+			}
+			
 			//为了进行触底加载，需要将上一页的数据和新数据进行拼接
 			newsArr.value = [...newsArr.value,...res.data]
 		}
@@ -62,11 +70,22 @@ function getNewsData(id=50){
 // 设置触底加载
 onReachBottom(()=>{
 	console.log("到底部了")
+	//进行判断：如果已经没有数据了loading=2，就不用再发送请求了
+	if(loading.value==2){
+		return;
+	}
 	//使当前页码+1
 	currentPage.value++
+	//触底的时候显示loading
+	loading.value = 1;
 	//使用新的页面，再次获取新闻列表数据
 	getNewsData()
 })
+
+// 定义loading状态
+// 0默认（什么都不显示）；1显示加载中；2显示没有更多了
+const loading = ref(0)
+
 </script>
 <template>
 	<view class="home">
@@ -85,12 +104,17 @@ onReachBottom(()=>{
 			<view class="row" v-for="item in newsArr" :key="item.id">
 				<newsbox 
 				:item="item"
-				@click.native="goDetail"></newsbox>
+				@click.native="goDetail(item)"></newsbox>
 			</view>
 			<!-- 当某分类下没有新闻时，进行空白页处理 -->
 			<view class="nodata" v-if="!newsArr.length">
-				<image src="../../static/icon/nodata.png" mode=""></image>
+				<image src="../../static/icon/nodata.png" mode="widthFix"></image>
 			</view>
+		</view>
+		<!-- 加载时显示loading -->
+		<view class="loading" v-if="newsArr.length">
+			<view v-if="loading==1">数据加载中...</view>
+			<view v-if="loading==2">没有更多了~~</view>
 		</view>
 	</view>
 </template>
@@ -140,5 +164,12 @@ onReachBottom(()=>{
 	image{
 		width:360rpx;
 	}
+}
+// laoding处理的样式
+.loading{
+	text-align: center;
+	font-size: 26rpx;
+	color: #888;
+	line-height: 2em;
 }
 </style>
