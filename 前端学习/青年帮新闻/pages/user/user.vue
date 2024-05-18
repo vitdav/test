@@ -1,5 +1,26 @@
 <script setup>
-	
+import {ref} from 'vue'
+import {onShow} from '@dcloudio/uni-app'
+
+
+//缓存里的浏览记录
+const listArr = ref([])
+
+function goDetail(item){
+	uni.navigateTo({
+		url:`/pages/detail/detail?cid=${item.classid}&id=${item.id}`
+	})
+}
+
+//onShow生命周期时，读取缓存里的浏览记录
+onShow(()=>{
+	getData()
+})
+
+function getData(){
+	listArr.value = uni.getStorageSync("historyArr")|| []
+}
+
 </script>
 <template>
 	<view class="user">
@@ -10,8 +31,15 @@
 		</view>
 		<!-- 下方的浏览记录列表：循环显示newsbox组件 -->
 		<view class="content">
-			<view class="row">
-				<newsbox></newsbox>
+			<view class="row" v-for="item in listArr">
+				<newsbox :item="item"
+					@click.native="goDetail(item)"
+				></newsbox>
+			</view>
+			<!-- 无缓存数据的提示 -->
+			<view class="nohistory" v-if="!listArr.length">
+				<image src="../../static/icon/nohis.png" mode="widthFix"></image>
+				<view class="text">暂无浏览记录</view>
 			</view>
 		</view>
 	</view>
@@ -47,6 +75,20 @@
 	.row{
 		border-bottom: 1px dotted #efefef;
 		padding: 20rpx 0;
+	}
+}
+// 3. 无历史记录时的样式
+.nohistory{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	image{
+		width: 450rpx;
+	}
+	.text{
+		font-size:26rpx;
+		color:#888;
 	}
 }
 </style>

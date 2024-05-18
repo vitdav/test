@@ -30,12 +30,48 @@ function getDetail(){
 			//对时间进行格式化处理
 			res.data.posttime=parseTime(res.data.posttime)
 			detail.value = res.data;
+			//加载了该新闻，就说明已经浏览量，将其加入到缓存，作为浏览记录
+			saveHistory()
+			
 			//动态设置导航条为：当前新闻的标题
 			uni.setNavigationBarTitle({
 				title:detail.value.title
 			})
 		}
 	})
+}
+
+// 将浏览的新闻详情数据，加入到缓存
+function saveHistory(){
+	//读取或定义缓存数组
+	let historyArr = uni.getStorageSync("historyArr") || []
+	//设置要缓存的数据
+	let item = {
+		title: detail.value.title,
+		id: detail.value.id,
+		classid: detail.value.classid,
+		picurl: detail.value.picurl,
+		looktime: parseTime(Date.now())	
+	}
+	
+	//将数据加入缓存前进行判断，防止添加重复的历史记录
+	//方案：加入缓存之前，判断新闻id是否已在数组中，获取所在索引
+	//处理：可以删除就记录添加新记录，也可以修改旧记录的日期
+	let index = historyArr.findIndex(i=>{
+		return i.id==detail.value.id
+	})
+	
+	if(index>=0){
+		historyArr.splice(index,1)
+	}
+	
+	//将数据追加到数组
+	historyArr.unshift(item)
+	//截取前10条，也就是最多缓存10条数据
+	historyArr = historyArr.slice(0,10);
+	
+	uni.setStorageSync("historyArr",historyArr)
+	console.log(historyArr)
 }
 </script>
 
