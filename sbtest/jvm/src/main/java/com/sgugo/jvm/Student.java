@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class Student {
+    private static int value =1;
     private String name;
     private Integer id;
     private byte[] bytes = new byte[1024 * 1024];
