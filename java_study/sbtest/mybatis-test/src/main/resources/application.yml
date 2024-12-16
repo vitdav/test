@@ -1,0 +1,18 @@
+server:
+  port: 6677
+spring:
+  application:
+    name: mybatis-test
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://120.24.179.66:3306/security?serverTimezone=UTC
+      username: admin
+      password: fuck2023!
+
+mybatis-plus:
+  type-aliases-package: com.sgugo.entity
+#  global-config:
+#    db-config:
+#      table-prefix: t_
+
